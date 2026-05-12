@@ -22,6 +22,7 @@ type backend int
 const (
 	backendClaude backend = iota
 	backendOllama
+	backendOpenAI
 )
 
 // ── streaming message types (internal to this package) ───────────────────────
@@ -46,9 +47,10 @@ type ChatMessage struct {
 // ── Panel model ───────────────────────────────────────────────────────────────
 
 type Model struct {
-	claude *ClaudeClient
-	ollama *OllamaClient
-	cfg    *config.AIConfig
+	claude  *ClaudeClient
+	ollama  *OllamaClient
+	openai  *OpenAIClient
+	cfg     *config.AIConfig
 
 	backend  backend
 	history  []ChatMessage
@@ -81,8 +83,13 @@ func NewModel(cfg *config.AIConfig, width, height int) Model {
 
 	claude := NewClaudeClient(cfg)
 	ollama := NewOllamaClient(cfg)
+	openai := NewOpenAIClient(cfg)
 
+	// Pick the first available backend in priority order
 	b := backendOllama
+	if openai.Available() {
+		b = backendOpenAI
+	}
 	if claude.Available() {
 		b = backendClaude
 	}
@@ -90,6 +97,7 @@ func NewModel(cfg *config.AIConfig, width, height int) Model {
 	return Model{
 		claude:  claude,
 		ollama:  ollama,
+		openai:  openai,
 		cfg:     cfg,
 		backend: b,
 		input:   ti,
@@ -156,14 +164,7 @@ func (m Model) Update(msg tea.Msg) (Model, tea.Cmd) {
 			}
 
 		case "ctrl+b":
-			// Toggle backend if both available
-			if m.claude.Available() && m.ollama != nil {
-				if m.backend == backendClaude {
-					m.backend = backendOllama
-				} else {
-					m.backend = backendClaude
-				}
-			}
+			m.backend = m.nextBackend()
 			return m, nil
 
 		case "ctrl+p":
@@ -236,6 +237,12 @@ func (m Model) streamCmd(prompt string) tea.Cmd {
 				return
 			}
 			ask = m.claude.Ask
+		case backendOpenAI:
+			if !m.openai.Available() {
+				ch <- streamItem{err: fmt.Errorf("OpenAI-compatible endpoint not configured — set OPENAI_BASE_URL"), done: true}
+				return
+			}
+			ask = m.openai.Ask
 		default:
 			if m.ollama == nil {
 				ch <- streamItem{err: fmt.Errorf("Ollama not configured"), done: true}
@@ -348,15 +355,18 @@ var (
 func (m Model) View() string {
 	var b strings.Builder
 
-	backendLabel := "ollama"
-	if m.backend == backendClaude {
-		backendLabel = "claude"
+	availCount := 0
+	for _, be := range []backend{backendClaude, backendOpenAI, backendOllama} {
+		if m.backendAvailable(be) {
+			availCount++
+		}
 	}
-	if m.claude.Available() && m.ollama != nil {
-		backendLabel += "  ctrl+b=swap"
+	label := m.backendLabel()
+	if availCount > 1 {
+		label += "  ctrl+b=next"
 	}
 
-	b.WriteString(stylePanelTitle.Render(fmt.Sprintf("  AI Panel  [%s]", backendLabel)) + "\n")
+	b.WriteString(stylePanelTitle.Render(fmt.Sprintf("  AI Panel  [%s]", label)) + "\n")
 
 	chatH := m.contentHeight()
 	lines := m.renderHistory()
@@ -443,6 +453,51 @@ func (m Model) contentHeight() int {
 
 func (m *Model) scrollToBottom() {
 	m.scrollOffset = 0
+}
+
+// nextBackend cycles to the next available backend.
+func (m Model) nextBackend() backend {
+	order := []backend{backendClaude, backendOpenAI, backendOllama}
+	cur := m.backend
+	for i, b := range order {
+		if b == cur {
+			for j := 1; j <= len(order); j++ {
+				next := order[(i+j)%len(order)]
+				if m.backendAvailable(next) {
+					return next
+				}
+			}
+			break
+		}
+	}
+	return cur
+}
+
+func (m Model) backendAvailable(b backend) bool {
+	switch b {
+	case backendClaude:
+		return m.claude.Available()
+	case backendOpenAI:
+		return m.openai.Available()
+	case backendOllama:
+		return m.ollama != nil
+	}
+	return false
+}
+
+func (m Model) backendLabel() string {
+	switch m.backend {
+	case backendClaude:
+		return "claude:" + m.cfg.ClaudeModel
+	case backendOpenAI:
+		label := "openai"
+		if m.openai != nil && m.openai.ModelName() != "" {
+			label = m.openai.ModelName()
+		}
+		return label
+	default:
+		return "ollama:" + m.cfg.OllamaModel
+	}
 }
 
 // wrap breaks s into lines of at most width runes.

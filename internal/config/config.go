@@ -22,6 +22,11 @@ type AIConfig struct {
 	OllamaModel     string `mapstructure:"ollama_model"`
 	ClaudeModel     string `mapstructure:"claude_model"`
 	ContextLines    int    `mapstructure:"context_lines"` // lines of terminal output sent to AI
+
+	// OpenAI-compatible endpoint (OpenWebUI, LiteLLM, LocalAI, vLLM, etc.)
+	OpenAIBaseURL string `mapstructure:"openai_base_url"`
+	OpenAIAPIKey  string `mapstructure:"openai_api_key"`
+	OpenAIModel   string `mapstructure:"openai_model"`
 }
 
 type UIConfig struct {

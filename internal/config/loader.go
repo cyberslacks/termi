@@ -26,12 +26,18 @@ func Load(dataDir string) (*Config, error) {
 	v.SetEnvPrefix("TERMI")
 	v.AutomaticEnv()
 
-	// ANTHROPIC_API_KEY is the standard env var — support it directly
+	// Map standard env vars directly
 	if key := os.Getenv("ANTHROPIC_API_KEY"); key != "" {
 		v.Set("ai.anthropic_api_key", key)
 	}
 	if host := os.Getenv("OLLAMA_HOST"); host != "" {
 		v.Set("ai.ollama_host", host)
+	}
+	if url := os.Getenv("OPENAI_BASE_URL"); url != "" {
+		v.Set("ai.openai_base_url", url)
+	}
+	if key := os.Getenv("OPENAI_API_KEY"); key != "" {
+		v.Set("ai.openai_api_key", key)
 	}
 
 	_ = v.ReadInConfig() // missing config file is fine
@@ -54,6 +60,7 @@ func setDefaults(v *viper.Viper, dataDir string) {
 	v.SetDefault("ai.ollama_model", "llama3")
 	v.SetDefault("ai.claude_model", "claude-sonnet-4-6")
 	v.SetDefault("ai.context_lines", 100)
+	v.SetDefault("ai.openai_model", "gpt-4o")
 
 	v.SetDefault("ui.escape_key", "ctrl+b")
 	v.SetDefault("ui.theme", "dark")

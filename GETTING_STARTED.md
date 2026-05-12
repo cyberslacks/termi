@@ -120,6 +120,8 @@ Results appear per host showing stdout, exit code, and whether it succeeded. Pre
 
 ### Set up the AI backend
 
+Three backends are available. Configure one or more — press `ctrl+b` inside the panel to cycle between them.
+
 **Option A — Ollama (local, free)**
 
 ```bash
@@ -137,7 +139,23 @@ export ANTHROPIC_API_KEY=sk-ant-...
 ./bin/termi
 ```
 
-Claude is used when the key is present. Both can coexist — press `ctrl+b` inside the AI panel to swap.
+**Option C — OpenAI-compatible endpoint (OpenWebUI, LiteLLM, vLLM, Groq, etc.)**
+
+```bash
+export OPENAI_BASE_URL=http://localhost:3000   # your OpenWebUI URL
+export OPENAI_API_KEY=sk-...                   # omit if no auth required
+./bin/termi
+```
+
+Or add to `~/.config/termi/config.yaml`:
+
+```yaml
+ai:
+  openai_base_url: http://localhost:3000
+  openai_model: llama3.2    # any model available in your endpoint
+```
+
+Any server that speaks the standard `/v1/chat/completions` streaming API works.
 
 ### Ask the AI to write a playbook
 
@@ -244,6 +262,8 @@ Environment variables override the config file:
 |---|---|
 | `ANTHROPIC_API_KEY` | Enable Claude |
 | `OLLAMA_HOST` | Ollama server URL |
+| `OPENAI_BASE_URL` | OpenAI-compatible endpoint (OpenWebUI, LiteLLM, etc.) |
+| `OPENAI_API_KEY` | Bearer token for that endpoint |
 | `TERMI_DATA_DIR` | Override `~/.local/share/termi` |
 
 ---

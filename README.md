@@ -17,7 +17,7 @@ termi lets you open multiple SSH sessions as tabs, broadcast commands across all
 | **Ansible playbooks** | Register `.yml` playbooks, run them against any stored sessions — no active connection needed |
 | **Scheduler** | Cron-based jobs that run Ansible playbooks in **interactive** (approval required) or **autonomous** (unattended + audited) mode |
 | **Audit log** | Every command and playbook run is recorded with session, actor, exit code, and output snippet |
-| **AI panel** | Chat with Claude or Ollama; AI has context about your active sessions and recent terminal output; generates Ansible playbooks you can save to disk with one keystroke |
+| **AI panel** | Chat with Claude, Ollama, or any OpenAI-compatible endpoint (OpenWebUI, LiteLLM, vLLM, Groq…); AI has context about your active sessions and recent terminal output; generates Ansible playbooks you can save to disk with one keystroke |
 | **OS keyring** | Passwords and passphrases stored in GNOME Keyring / macOS Keychain / Windows Credential Manager — never in the database |
 
 ---
@@ -32,6 +32,8 @@ termi lets you open multiple SSH sessions as tabs, broadcast commands across all
 | `sshpass` | Optional | Only needed for password-auth Ansible runs |
 | Ollama | Optional | Local LLM; AI panel works without it if Claude is configured |
 | `ANTHROPIC_API_KEY` | Optional | Enables Claude in the AI panel |
+| `OPENAI_BASE_URL` | Optional | OpenAI-compatible endpoint (OpenWebUI, LiteLLM, vLLM, etc.) |
+| `OPENAI_API_KEY` | Optional | Bearer token for the OpenAI-compatible endpoint |
 
 ---
 
@@ -312,6 +314,8 @@ ui:
 |---|---|
 | `ANTHROPIC_API_KEY` | Enable Claude in the AI panel |
 | `OLLAMA_HOST` | Ollama server URL (overrides config) |
+| `OPENAI_BASE_URL` | OpenAI-compatible endpoint URL |
+| `OPENAI_API_KEY` | Bearer token for the OpenAI-compatible endpoint |
 | `TERMI_DATA_DIR` | Override `~/.local/share/termi` data directory |
 
 ---
@@ -334,8 +338,31 @@ Override with `--data-dir /path/to/dir` or `TERMI_DATA_DIR`.
 
 ### Backend selection
 
-- **Claude** is used when `ANTHROPIC_API_KEY` is set. Model defaults to `claude-sonnet-4-6`.
-- **Ollama** is used when Claude is not configured, or when you press `ctrl+b` in the panel to swap. Requires Ollama running locally with at least one model pulled.
+Three backends are supported. Press `ctrl+b` inside the panel to cycle through whichever are configured.
+
+| Backend | How to enable | Default model |
+|---|---|---|
+| **Claude** | Set `ANTHROPIC_API_KEY` | `claude-sonnet-4-6` |
+| **OpenAI-compatible** | Set `OPENAI_BASE_URL` (and optionally `OPENAI_API_KEY`) | `gpt-4o` |
+| **Ollama** | Run `ollama serve` locally | `llama3` |
+
+The OpenAI-compatible backend works with any server that speaks the `/v1/chat/completions` streaming API: OpenWebUI, LiteLLM, LocalAI, vLLM, Groq, Together AI, and others.
+
+```yaml
+# ~/.config/termi/config.yaml
+ai:
+  openai_base_url: http://localhost:3000   # OpenWebUI default port
+  openai_api_key: ""                        # leave blank if no auth required
+  openai_model: llama3.2                    # any model loaded in OpenWebUI
+```
+
+Or via environment variables:
+
+```bash
+export OPENAI_BASE_URL=http://my-openwebui:3000
+export OPENAI_API_KEY=sk-...          # optional
+./bin/termi
+```
 
 ### Context injected automatically
 
