@@ -1,4 +1,4 @@
-module github.com/jtfrow/termi
+module github.com/cyberslacks/termi
 
 go 1.23.0
 

@@ -1,6 +1,6 @@
 package scheduler
 
-import "github.com/jtfrow/termi/internal/store"
+import "github.com/cyberslacks/termi/internal/store"
 
 // SchedulerLoadedMsg is sent when the job list is fetched from the DB.
 type SchedulerLoadedMsg struct {

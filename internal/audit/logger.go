@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/jtfrow/termi/internal/store"
+	"github.com/cyberslacks/termi/internal/store"
 )
 
 // Logger writes audit entries non-blocking via a channel-backed goroutine.

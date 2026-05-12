@@ -1,6 +1,6 @@
 package sessions
 
-import "github.com/jtfrow/termi/internal/store"
+import "github.com/cyberslacks/termi/internal/store"
 
 // ConnectRequestMsg is sent when the user selects a session to connect to.
 type ConnectRequestMsg struct{ Session store.Session }

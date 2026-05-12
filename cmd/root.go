@@ -8,14 +8,14 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 
-	"github.com/jtfrow/termi/internal/app"
-	"github.com/jtfrow/termi/internal/audit"
-	"github.com/jtfrow/termi/internal/config"
-	"github.com/jtfrow/termi/internal/creds"
-	"github.com/jtfrow/termi/internal/playbook"
-	"github.com/jtfrow/termi/internal/scheduler"
-	"github.com/jtfrow/termi/internal/ssh"
-	"github.com/jtfrow/termi/internal/store"
+	"github.com/cyberslacks/termi/internal/app"
+	"github.com/cyberslacks/termi/internal/audit"
+	"github.com/cyberslacks/termi/internal/config"
+	"github.com/cyberslacks/termi/internal/creds"
+	"github.com/cyberslacks/termi/internal/playbook"
+	"github.com/cyberslacks/termi/internal/scheduler"
+	"github.com/cyberslacks/termi/internal/ssh"
+	"github.com/cyberslacks/termi/internal/store"
 )
 
 var dataDir string

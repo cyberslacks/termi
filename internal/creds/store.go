@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jtfrow/termi/internal/store"
+	"github.com/cyberslacks/termi/internal/store"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/agent"
 )

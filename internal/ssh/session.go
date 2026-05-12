@@ -7,8 +7,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/jtfrow/termi/internal/creds"
-	"github.com/jtfrow/termi/internal/store"
+	"github.com/cyberslacks/termi/internal/creds"
+	"github.com/cyberslacks/termi/internal/store"
 	gossh "golang.org/x/crypto/ssh"
 )
 

@@ -1,6 +1,6 @@
 package playbooks
 
-import "github.com/jtfrow/termi/internal/store"
+import "github.com/cyberslacks/termi/internal/store"
 
 // PlaybooksLoadedMsg is sent when the playbook list is fetched from the DB.
 type PlaybooksLoadedMsg struct {

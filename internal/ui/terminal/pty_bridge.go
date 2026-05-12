@@ -4,7 +4,7 @@ import (
 	"io"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/jtfrow/termi/internal/msgs"
+	"github.com/cyberslacks/termi/internal/msgs"
 )
 
 // StartBridge launches a goroutine that reads PTY output and sends TermOutputMsg

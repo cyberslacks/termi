@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jtfrow/termi/internal/audit"
-	"github.com/jtfrow/termi/internal/playbook"
-	"github.com/jtfrow/termi/internal/store"
+	"github.com/cyberslacks/termi/internal/audit"
+	"github.com/cyberslacks/termi/internal/playbook"
+	"github.com/cyberslacks/termi/internal/store"
 	"github.com/robfig/cron/v3"
 )
 

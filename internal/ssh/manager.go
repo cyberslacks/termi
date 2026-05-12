@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jtfrow/termi/internal/creds"
-	"github.com/jtfrow/termi/internal/store"
+	"github.com/cyberslacks/termi/internal/creds"
+	"github.com/cyberslacks/termi/internal/store"
 )
 
 // ActiveSessionInfo is a snapshot of an open SSH session.

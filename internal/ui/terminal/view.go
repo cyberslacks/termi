@@ -3,7 +3,7 @@ package terminal
 import (
 	"strings"
 
-	"github.com/jtfrow/termi/pkg/vtparser"
+	"github.com/cyberslacks/termi/pkg/vtparser"
 )
 
 // View renders the VT framebuffer cell-by-cell using lipgloss styles.

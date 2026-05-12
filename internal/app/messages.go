@@ -3,9 +3,9 @@
 package app
 
 import (
-	"github.com/jtfrow/termi/internal/msgs"
-	"github.com/jtfrow/termi/internal/scheduler"
-	"github.com/jtfrow/termi/internal/ssh"
+	"github.com/cyberslacks/termi/internal/msgs"
+	"github.com/cyberslacks/termi/internal/scheduler"
+	"github.com/cyberslacks/termi/internal/ssh"
 )
 
 // Re-export shared screen IDs so callers only need to import app.

@@ -2,9 +2,9 @@ package terminal
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/jtfrow/termi/internal/msgs"
-	"github.com/jtfrow/termi/internal/ssh"
-	"github.com/jtfrow/termi/pkg/vtparser"
+	"github.com/cyberslacks/termi/internal/msgs"
+	"github.com/cyberslacks/termi/internal/ssh"
+	"github.com/cyberslacks/termi/pkg/vtparser"
 )
 
 // Model holds the state for one terminal tab.

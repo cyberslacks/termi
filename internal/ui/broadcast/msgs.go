@@ -1,6 +1,6 @@
 package broadcast
 
-import "github.com/jtfrow/termi/internal/ssh"
+import "github.com/cyberslacks/termi/internal/ssh"
 
 // RunBroadcastMsg is sent by the model when the user confirms a broadcast.
 // app.go catches it, executes the command, then sends back BroadcastDoneMsg.

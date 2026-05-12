@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jtfrow/termi/internal/config"
+	"github.com/cyberslacks/termi/internal/config"
 )
 
 type OllamaClient struct {

@@ -11,8 +11,8 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/jtfrow/termi/internal/config"
-	"github.com/jtfrow/termi/internal/ssh"
+	"github.com/cyberslacks/termi/internal/config"
+	"github.com/cyberslacks/termi/internal/ssh"
 )
 
 // ── backend selector ─────────────────────────────────────────────────────────

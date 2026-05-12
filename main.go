@@ -1,6 +1,6 @@
 package main
 
-import "github.com/jtfrow/termi/cmd"
+import "github.com/cyberslacks/termi/cmd"
 
 func main() {
 	cmd.Execute()

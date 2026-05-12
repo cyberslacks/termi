@@ -10,7 +10,7 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/jtfrow/termi/internal/store"
+	"github.com/cyberslacks/termi/internal/store"
 )
 
 // sessionItem wraps store.Session to satisfy list.Item.

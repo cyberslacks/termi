@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jtfrow/termi/internal/ssh"
+	"github.com/cyberslacks/termi/internal/ssh"
 )
 
 // BuildContext assembles context for the AI from active sessions.

@@ -1,6 +1,6 @@
 package audit
 
-import "github.com/jtfrow/termi/internal/store"
+import "github.com/cyberslacks/termi/internal/store"
 
 // AuditLoadedMsg is sent when entries are fetched from the DB.
 type AuditLoadedMsg struct {

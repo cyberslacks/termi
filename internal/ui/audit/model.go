@@ -8,7 +8,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/jtfrow/termi/internal/store"
+	"github.com/cyberslacks/termi/internal/store"
 )
 
 type actorFilter int
