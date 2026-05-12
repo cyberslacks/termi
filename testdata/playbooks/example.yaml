@@ -1,0 +1,30 @@
+name: update-system
+description: Install all available system updates and optionally reboot
+tags:
+  - maintenance
+  - updates
+trusted: false
+variables:
+  - name: REBOOT_IF_NEEDED
+    default: "false"
+    required: false
+steps:
+  - name: Update package lists
+    command: sudo apt-get update -y
+    timeout: 120s
+    on_error: abort
+
+  - name: Upgrade packages
+    command: sudo apt-get upgrade -y
+    timeout: 600s
+    on_error: abort
+
+  - name: Remove unused packages
+    command: sudo apt-get autoremove -y
+    timeout: 120s
+    on_error: continue
+
+  - name: Reboot if needed
+    command: 'if [ "{{ .REBOOT_IF_NEEDED }}" = "true" ] && [ -f /var/run/reboot-required ]; then sudo reboot; fi'
+    timeout: 10s
+    on_error: continue
