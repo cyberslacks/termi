@@ -18,7 +18,12 @@ import (
 	"github.com/cyberslacks/termi/internal/store"
 )
 
-var dataDir string
+var (
+	dataDir      string
+	openAIURL    string
+	openAIModel  string
+	openAIKey    string
+)
 
 var rootCmd = &cobra.Command{
 	Use:   "termi",
@@ -26,15 +31,17 @@ var rootCmd = &cobra.Command{
 	Long: `termi — TUI SSH terminal manager.
 
 Features: session management, credential storage, broadcast commands,
-Ansible playbook automation, AI-assisted management (Claude + Ollama), and
+Ansible playbook automation, AI-assisted management (Claude + Ollama + OpenAI-compatible), and
 scheduled autonomous or interactive job execution.
 
 Environment variables:
   ANTHROPIC_API_KEY  — enables Claude AI panel
   OLLAMA_HOST        — Ollama server URL (default: http://localhost:11434)
+  OPENAI_BASE_URL    — OpenAI-compatible endpoint (OpenWebUI, LiteLLM, vLLM, Groq…)
+  OPENAI_API_KEY     — bearer token for the OpenAI-compatible endpoint
   TERMI_DATA_DIR     — override data directory`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return run()
+		return run(cmd)
 	},
 }
 
@@ -47,15 +54,29 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&dataDir, "data-dir", "", "data directory (default ~/.local/share/termi)")
+	rootCmd.Flags().StringVar(&openAIURL, "openai-url", "", "OpenAI-compatible base URL (e.g. http://localhost:3000)")
+	rootCmd.Flags().StringVar(&openAIModel, "openai-model", "", "model name for the OpenAI-compatible endpoint")
+	rootCmd.Flags().StringVar(&openAIKey, "openai-key", "", "API key / bearer token for the OpenAI-compatible endpoint")
 }
 
-func run() error {
+func run(cmd *cobra.Command) error {
 	ctx := context.Background()
 
 	// Load config
 	cfg, err := config.Load(dataDir)
 	if err != nil {
 		return fmt.Errorf("load config: %w", err)
+	}
+
+	// CLI flags override config/env
+	if cmd.Flags().Changed("openai-url") {
+		cfg.AI.OpenAIBaseURL = openAIURL
+	}
+	if cmd.Flags().Changed("openai-model") {
+		cfg.AI.OpenAIModel = openAIModel
+	}
+	if cmd.Flags().Changed("openai-key") {
+		cfg.AI.OpenAIAPIKey = openAIKey
 	}
 
 	// Open database
